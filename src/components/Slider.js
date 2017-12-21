@@ -5,6 +5,7 @@ import { fetchDataRequest } from '../actions'
 import 'rc-slider/assets/index.css'
 import Tooltip from 'rc-tooltip'
 import { get as g } from 'lodash'
+import {saveAmountInterval} from '../actions'
 
 const wrapperStyle = { width: 400, margin: 50 }
 const Handle = Slider.Handle
@@ -24,7 +25,9 @@ const handle = props => {
   )
 }
 
-const SliderComp = ({ interval }) => (
+const SliderComp = ({ interval, onSave }) => {
+  console.log("SAVBE", onSave)
+  return(
   <div>
     <div style={wrapperStyle}>
       <p>Slider with custom handle</p>
@@ -34,9 +37,10 @@ const SliderComp = ({ interval }) => (
         step={g(interval, 'step')}
         defaultValue={g(interval, 'defaultValue')}
         handle={handle}
+        onChange={onSave}
       />
     </div>
   </div>
-)
+)}
 
 export default SliderComp
