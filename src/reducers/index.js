@@ -1,14 +1,18 @@
 import { combineReducers } from 'redux'
-import {
-  FETCH_DATA_REQUEST,
-} from '../actions/index'
+import { FETCH_DATA_REQUEST, FETCH_DATA_SUCCESS } from '../actions/index'
 
-export const data = (state = [], action) => {
-  return state
+export const sliderConfig = (state = [], action) => {
+  switch (action.type) {
+    case FETCH_DATA_SUCCESS:
+      const { data } = action.payload
+      return data
+    default:
+      return state
+  }
 }
 
 const rootReducer = combineReducers({
-  data
+  sliderConfig
 })
 
 export default rootReducer
