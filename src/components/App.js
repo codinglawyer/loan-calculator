@@ -1,39 +1,62 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Slider from 'rc-slider'
-import { fetchDataRequest, saveAmountInterval, saveTermInterval } from '../actions'
-import 'rc-slider/assets/index.css'
-import Tooltip from 'rc-tooltip'
 import { compose, withHandlers, lifecycle } from 'recompose'
-import { get as g } from 'lodash'
+import { get as g, debounce, throttle } from 'lodash'
+import {
+  fetchDataRequest,
+  saveAmountInterval,
+  saveTermInterval
+} from '../actions'
 import SliderComp from './Slider'
-
-const createSliderWithTooltip = Slider.createSliderWithTooltip
+import LoanInfo from './LoanInfo'
 
 const mapStateToProps = state => {
   return {
-    data: state.sliderConfig
+    configData: g(state, 'sliderConfig'),
+    loanInfo: g(state, 'loanInformation')
   }
 }
 
-const App = ({ data, handleSaveAmountInterval, handleSaveTermInterval }) => {
-  const { amountInterval, termInterval } = data
+const App = ({
+  configData,
+  loanInfo,
+  handleSaveAmountInterval,
+  handleSaveTermInterval
+}) => {
+  const { amountInterval, termInterval } = configData
   return (
     <div>
-      <SliderComp interval={amountInterval} onSave={handleSaveAmountInterval}/>
-      <SliderComp interval={termInterval} onSave={handleSaveTermInterval}/>
+      <SliderComp
+        title="Total Amount"
+        interval={amountInterval}
+        onSave={handleSaveAmountInterval}
+      />
+      <SliderComp
+        title="Term"
+        interval={termInterval}
+        onSave={handleSaveTermInterval}
+      />
+      <LoanInfo data={loanInfo} />
     </div>
   )
 }
 
 export default compose(
   connect(mapStateToProps),
-  withHandlers({
-    handleFetchData: ({ dispatch }) => () => dispatch(fetchDataRequest()),
-    handleSaveAmountInterval: ({ dispatch }) => val =>{
-      dispatch(saveAmountInterval(val))},
-    handleSaveTermInterval: ({ dispatch }) => val =>{
-      dispatch(saveTermInterval(val))}
+  withHandlers(({ dispatch }) => {
+    const debouncedSaveAmountInterval = debounce(
+      val => dispatch(saveAmountInterval(val)),
+      1000
+    )
+    const debouncedSaveTermInterval = debounce(
+      val => dispatch(saveTermInterval(val)),
+      1000
+    )
+    return {
+      handleFetchData: ({ dispatch }) => () => dispatch(fetchDataRequest()),
+      handleSaveAmountInterval: () => val => debouncedSaveAmountInterval(val),
+      handleSaveTermInterval: () => val => debouncedSaveTermInterval(val)
+    }
   }),
   lifecycle({
     componentDidMount() {
