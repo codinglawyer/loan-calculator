@@ -19,8 +19,12 @@
 
     `http://localhost:8080/`
 
-TODO:
+#####TODO:
+
 define state selectors,
+
 write tests - reducers, sagas, selectors
+
 seamless-immutable - make sure that reducers return immutable data
-define actions for failed requests and store error in the state
+
+define actions for failed requests and store errors in the state
