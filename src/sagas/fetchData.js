@@ -5,7 +5,6 @@ import { FETCH_DATA_REQUEST, fetchDataSuccess} from '../actions'
 export function* fetchData() {
   try {
     const response = yield axios.get('https://js-developer-second-round.herokuapp.com/api/v1/application/constraints')
-    console.log("RESPONSE", response)
     yield put(fetchDataSuccess(response.data))
   } catch (error) {
     console.log("ERROR", error)
