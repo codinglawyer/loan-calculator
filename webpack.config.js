@@ -2,7 +2,8 @@ const path = require('path')
 
 const PATHS = {
   app: path.join(__dirname, 'src'),
-  build: path.join(__dirname, 'build')
+  build: path.join(__dirname, 'build'),
+  modules: path.join(__dirname, 'node_modules')
 }
 
 module.exports = {
@@ -23,7 +24,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: PATHS.app,
+        include: [PATHS.app, PATHS.modules],
         loaders: ['style-loader', 'css-loader']
       }
     ]

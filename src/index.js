@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import {fetchDataRequest} from './actions/index'
 
 
+
 const configureStore = () => {
   const store = createStore(
     RootReducer,
